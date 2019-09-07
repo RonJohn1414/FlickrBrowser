@@ -1,19 +1,22 @@
 package com.example.flickrbrowser
 
+import android.os.Build
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+import androidx.annotation.RequiresApi
 
-import kotlinx.android.synthetic.main.activity_search.*
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : BaseActivity() {
+    private val TAG = "SearchActivity"
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG,".onCreate for search: starts **")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        setSupportActionBar(toolbar)
+        activateToolbar(true)
+        Log.d(TAG,".onCreate for search: ends ****")
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
 }
