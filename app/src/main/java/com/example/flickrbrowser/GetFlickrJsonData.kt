@@ -1,6 +1,5 @@
 package com.example.flickrbrowser
 
-import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.util.Log
 import org.json.JSONException
