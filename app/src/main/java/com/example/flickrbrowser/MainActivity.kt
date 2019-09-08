@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -33,10 +34,7 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
         recycler_view.addOnItemTouchListener(RecyclerItemClickListener(this, recycler_view,this))
         recycler_view.adapter = flickrRecyclerViewAdapter
 
-        val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne","space,planets,stars", "en-us", true)
-        val getRawData = GetRawData(this)
-    //    getRawData.setDownloadCompleteListener(this)
-        getRawData.execute(url)
+
 //        fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
@@ -46,7 +44,7 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
 
     override fun onItemClick(view: View, position: Int) {
         Log.d(TAG,".onItemClick: starts =======")
-        Toast.makeText(this,"Normal tap at position $position", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"Hold down image to enlarge!", Toast.LENGTH_LONG).show()
     }
 
     override fun onItemLongClick(view: View, position: Int) {
@@ -93,7 +91,10 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
         // as you specify a parent activity in AndroidManifest.xml.
         Log.d(TAG,"onCreateOptionsItemSelected called ***************")
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_search -> {
+                startActivity(Intent(this, SearchActivity::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -125,5 +126,21 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
 
     override fun onError(exception: Exception) {
         Log.e(TAG,"onError called with ${exception.message}")
+    }
+
+    override fun onResume() {
+        Log.d(TAG,".onResume starts  ++++++++")
+        super.onResume()
+
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val queryResult = sharedPref.getString(FLICKR_QUERY, "")
+        if (queryResult != null) {
+            if (queryResult.isNotEmpty()){
+                val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne",queryResult, "en-us", true)
+                val getRawData = GetRawData(this)
+                getRawData.execute(url)
+            }
+        }
+        Log.d(TAG,".onResume ends ---------")
     }
 }

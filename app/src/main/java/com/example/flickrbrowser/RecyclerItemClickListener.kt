@@ -32,6 +32,7 @@ class RecyclerItemClickListener(context: Context, recyclerView: RecyclerView, pr
         } else {
                 return false
             }
+
         }
 
         override fun onLongPress(e: MotionEvent) {
@@ -41,6 +42,7 @@ class RecyclerItemClickListener(context: Context, recyclerView: RecyclerView, pr
                 Log.d(TAG, ".onLongPress calling listener.onItemLongClick")
                 listener.onItemLongClick(childView, recyclerView.getChildAdapterPosition(childView))
             }
+
         }
     })
 
